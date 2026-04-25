@@ -1,10 +1,11 @@
-
 spring:
   security:
     oauth2:
       resourceserver:
         jwt:
           issuer-uri: https://accounts.google.com
+  flyway:
+    baseline-on-migrate: true
   datasource:
     url: ${DB_URL}
     username: ${DB_USERNAME}
@@ -17,3 +18,10 @@ spring:
         dialect: org.hibernate.dialect.PostgreSQLDialect
   application:
     name: Localhost Lunches
+
+jwt:
+  secret: "404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970"
+
+logging:
+  level:
+    org.springframework.web: DEBUG

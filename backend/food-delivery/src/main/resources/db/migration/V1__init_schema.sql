@@ -1,0 +1,63 @@
+CREATE TYPE user_role AS ENUM ('CUSTOMER', 'COURIER', 'RESTAURANT');
+CREATE TYPE order_status AS ENUM ('PENDING', 'PREPARING', 'DELIVERING', 'DELIVERED', 'CANCELLED');
+CREATE TYPE auth_provider AS ENUM('LOCAL', 'GOOGLE');
+
+CREATE TABLE users (
+    id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    email VARCHAR(255) UNIQUE NOT NULL,
+    password_hash VARCHAR(255) NOT NULL,
+    role user_role NOT NULL,
+    full_name VARCHAR(255),
+    phone_number VARCHAR(20) UNIQUE,
+    provider auth_provider NOT NULL
+);
+
+CREATE TABLE restaurants (
+    id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    owner_id BIGINT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    name VARCHAR(255) NOT NULL,
+    address VARCHAR(255),
+    tags TEXT[]
+);
+
+CREATE TABLE dishes (
+    id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    restaurant_id BIGINT NOT NULL REFERENCES restaurants(id) ON DELETE CASCADE,
+    name VARCHAR(255) NOT NULL,
+    description TEXT,
+    price DECIMAL(10, 2) NOT NULL,
+    image_path VARCHAR(255)
+);
+
+CREATE TABLE categories (
+    id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    parent_id BIGINT REFERENCES categories(id) ON DELETE SET NULL,
+    name VARCHAR(255) NOT NULL,
+    image_path VARCHAR(255),
+    sort_order INT DEFAULT 0,
+    is_active BOOLEAN DEFAULT TRUE
+);
+
+CREATE TABLE dish_categories (
+    dish_id BIGINT NOT NULL REFERENCES dishes(id) ON DELETE CASCADE,
+    category_id BIGINT NOT NULL REFERENCES categories(id) ON DELETE CASCADE,
+    PRIMARY KEY (dish_id, category_id)
+);
+
+CREATE TABLE orders (
+    id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    customer_id BIGINT NOT NULL REFERENCES users(id) ON DELETE RESTRICT,
+    restaurant_id BIGINT NOT NULL REFERENCES restaurants(id) ON DELETE RESTRICT,
+    courier_id BIGINT REFERENCES users(id) ON DELETE SET NULL,
+    status order_status NOT NULL DEFAULT 'PENDING',
+    total_price DECIMAL(10, 2) NOT NULL,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE order_items (
+     id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+     order_id BIGINT NOT NULL REFERENCES orders(id) ON DELETE CASCADE,
+     dish_id BIGINT NOT NULL REFERENCES dishes(id) ON DELETE RESTRICT,
+     quantity INTEGER NOT NULL DEFAULT 1,
+     price_at_purchase DECIMAL(10, 2) NOT NULL
+);
