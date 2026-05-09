@@ -1,16 +1,29 @@
 import "next-auth";
 import "next-auth/jwt";
 
-// 1. Extend the built-in Session type
 declare module "next-auth" {
   interface Session {
-    idToken?: string; // Add your custom property
+    idToken?: string;
+    role?: string;
+    phoneNumber?: string;
+    error?: string;
+    user: {
+      idToken?: string;
+      role?: string;
+      phoneNumber?: string;
+    } & DefaultSession["user"];
+  }
+  interface User {
+    idToken?: string;
+    role?: string;
+    phoneNumber?: string;
   }
 }
 
-// 2. Extend the built-in JWT type
 declare module "next-auth/jwt" {
   interface JWT {
-    idToken?: string; // Add your custom property
+    idToken?: string;
+    role?: string;
+    phoneNumber?: string;
   }
 }

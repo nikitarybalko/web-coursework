@@ -1,12 +1,14 @@
-package org.nikitarybalko.food_delivery.catalog;
+package org.nikitarybalko.food_delivery.catalog.service;
 
-import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.nikitarybalko.food_delivery.dto.CategoryAddRequest;
-import org.nikitarybalko.food_delivery.dto.CategoryEditRequest;
-import org.nikitarybalko.food_delivery.dto.CategoryResponse;
-import org.nikitarybalko.food_delivery.mapper.CategoryMapper;
+import org.nikitarybalko.food_delivery.catalog.model.Category;
+import org.nikitarybalko.food_delivery.catalog.repository.CategoryRepository;
+import org.nikitarybalko.food_delivery.catalog.dto.CategoryAddRequest;
+import org.nikitarybalko.food_delivery.catalog.dto.CategoryEditRequest;
+import org.nikitarybalko.food_delivery.catalog.dto.CategoryResponse;
+import org.nikitarybalko.food_delivery.catalog.mapper.CategoryMapper;
+import org.nikitarybalko.food_delivery.shared.exception.ResourceNotFoundException;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -23,19 +25,14 @@ public class CategoryService {
     private final CategoryRepository categoryRepository;
     private final CategoryMapper categoryMapper;
 
-    public List<CategoryResponse> getRootCategories(Boolean onlyActive, Integer limit) {
+    public List<CategoryResponse> getRootCategories(Integer limit) {
 
         Pageable pageable = (limit != null && limit > 0)
                 ? PageRequest.of(0, limit)
                 : Pageable.unpaged();
 
-        List<Category> categories;
-
-        if (Boolean.TRUE.equals(onlyActive)) {
-            categories = categoryRepository.findByIsActiveTrueAndParentIsNullOrderBySortOrderAsc(pageable);
-        } else {
-            categories = categoryRepository.findByParentIsNullOrderBySortOrderAsc(pageable);
-        }
+        List<Category> categories = categoryRepository
+                .findByParentIsNullOrderBySortOrderAsc(pageable);
 
         return categoryMapper.toResponseList(categories);
     }
@@ -43,10 +40,6 @@ public class CategoryService {
     @Transactional
     public CategoryResponse addCategory(CategoryAddRequest request) {
         Category category = categoryMapper.toEntity(request);
-        if(category.getIsActive() == null) {
-            category.setIsActive(true);
-            log.info("Category's {} isActive state is not set. Setting it to 'true'", category.getName());
-        }
         Category savedCategory = categoryRepository.save(category);
         return categoryMapper.toResponse(savedCategory);
     }
@@ -54,11 +47,15 @@ public class CategoryService {
     @Transactional
     public CategoryResponse updateCategory(Long id, CategoryEditRequest request) {
         Category existingCategory = categoryRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Category not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Category not found: " + id));
+
+        Category parentCategory = categoryRepository.findById(request.parentId())
+                .orElseThrow(() -> new ResourceNotFoundException("Category not found: " + request.parentId()));
 
         existingCategory.setName(request.name());
+        existingCategory.setImagePath(request.imagePath());
         existingCategory.setSortOrder(request.sortOrder());
-        existingCategory.setIsActive(request.isActive());
+        existingCategory.setParent(parentCategory);
 
         Category savedCategory = categoryRepository.save(existingCategory);
         return categoryMapper.toResponse(savedCategory);

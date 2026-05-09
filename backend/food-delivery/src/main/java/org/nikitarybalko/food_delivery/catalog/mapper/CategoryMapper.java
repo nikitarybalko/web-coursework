@@ -1,11 +1,11 @@
-package org.nikitarybalko.food_delivery.mapper;
+package org.nikitarybalko.food_delivery.catalog.mapper;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;
-import org.nikitarybalko.food_delivery.dto.CategoryAddRequest;
-import org.nikitarybalko.food_delivery.dto.CategoryResponse;
-import org.nikitarybalko.food_delivery.catalog.Category;
+import org.nikitarybalko.food_delivery.catalog.dto.CategoryAddRequest;
+import org.nikitarybalko.food_delivery.catalog.dto.CategoryResponse;
+import org.nikitarybalko.food_delivery.catalog.model.Category;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -14,7 +14,6 @@ import java.util.stream.Collectors;
 public interface CategoryMapper {
 
     @Mapping(target = "children", qualifiedByName = "filterAndMapChildren")
-    @Mapping(target = "isActive")
     CategoryResponse toResponse(Category category);
 
     List<CategoryResponse> toResponseList(List<Category> categories);
@@ -22,12 +21,11 @@ public interface CategoryMapper {
     @Named("filterAndMapChildren")
     default List<CategoryResponse> filterAndMapChildren(List<Category> children) {
         if (children == null) {
-            return null;
+            return List.of();
         }
         return children.stream()
-                .filter(Category::getIsActive)
                 .map(this::toResponse)
-                .collect(Collectors.toList());
+                .toList();
     }
 
     @Mapping(target = "id", ignore = true)

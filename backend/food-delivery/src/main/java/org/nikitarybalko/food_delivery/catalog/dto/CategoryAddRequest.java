@@ -1,4 +1,4 @@
-package org.nikitarybalko.food_delivery.dto;
+package org.nikitarybalko.food_delivery.catalog.dto;
 
 import jakarta.validation.constraints.NotBlank;
 
@@ -11,8 +11,6 @@ public record CategoryAddRequest(
         String imagePath,
 
         int sortOrder,
-
-        Boolean isActive,
 
         Long parentId
 ) {

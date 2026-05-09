@@ -1,4 +1,11 @@
 package org.nikitarybalko.food_delivery.catalog.dto;
 
-public record RestaurantResponse() {
-}
+import java.util.List;
+
+public record RestaurantResponse(
+        Long id,
+        String name,
+        String address,
+        List<String> tags,
+        Double rating
+) {}

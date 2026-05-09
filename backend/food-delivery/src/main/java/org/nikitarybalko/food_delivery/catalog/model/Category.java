@@ -1,4 +1,4 @@
-package org.nikitarybalko.food_delivery.catalog;
+package org.nikitarybalko.food_delivery.catalog.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
@@ -27,11 +27,7 @@ public class Category {
     private String imagePath;
 
     @Column(name = "sort_order")
-
     private Integer sortOrder;
-
-    @Column(name = "is_active")
-    private Boolean isActive;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "parent_id")

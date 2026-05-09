@@ -1,10 +1,11 @@
-package org.nikitarybalko.food_delivery.catalog;
+package org.nikitarybalko.food_delivery.catalog.controller;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.nikitarybalko.food_delivery.dto.CategoryAddRequest;
-import org.nikitarybalko.food_delivery.dto.CategoryEditRequest;
-import org.nikitarybalko.food_delivery.dto.CategoryResponse;
+import org.nikitarybalko.food_delivery.catalog.service.CategoryService;
+import org.nikitarybalko.food_delivery.catalog.dto.CategoryAddRequest;
+import org.nikitarybalko.food_delivery.catalog.dto.CategoryEditRequest;
+import org.nikitarybalko.food_delivery.catalog.dto.CategoryResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -21,10 +22,9 @@ public class CategoryController {
 
     @GetMapping
     public ResponseEntity<List<CategoryResponse>> getCategories(
-            @RequestParam(required = false, defaultValue = "true") Boolean onlyActive,
             @RequestParam(required = false) Integer limit) {
 
-        List<CategoryResponse> categories = categoryService.getRootCategories(onlyActive, limit);
+        List<CategoryResponse> categories = categoryService.getRootCategories(limit);
         return ResponseEntity.ok(categories);
     }
 

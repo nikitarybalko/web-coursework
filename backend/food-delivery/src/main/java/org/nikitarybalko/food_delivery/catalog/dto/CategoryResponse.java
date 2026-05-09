@@ -1,17 +1,14 @@
-package org.nikitarybalko.food_delivery.dto;
+package org.nikitarybalko.food_delivery.catalog.dto;
 
 import lombok.Builder;
-import lombok.Data;
-
 import java.util.List;
 
-@Data
 @Builder
-public class CategoryResponse {
-    private Long id;
-    private String name;
-    private String imagePath;
-    private Boolean isActive;
-    private Integer sortOrder;
-    private List<CategoryResponse> children;
+public record CategoryResponse(
+        Long id,
+        String name,
+        String imagePath,
+        Integer sortOrder,
+        List<CategoryResponse> children
+) {
 }
