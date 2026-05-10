@@ -1,6 +1,5 @@
 package org.nikitarybalko.food_delivery.user.service;
 
-import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.nikitarybalko.food_delivery.shared.exception.ResourceNotFoundException;
 import org.nikitarybalko.food_delivery.user.dto.UserUpdateRequest;
@@ -22,11 +21,15 @@ public class UserService {
 
     @Transactional
     public void updateUser(String email, UserUpdateRequest request) {
-        User user = userRepository.findByEmail(email).orElseThrow(
-                () -> new ResourceNotFoundException("Користувача з Email " + email + " не знайдено"));
+        User user = getUserByEmail(email);
 
         user.setFullName(request.fullName());
         user.setPhoneNumber(request.phoneNumber().isBlank() ? null : request.phoneNumber());
         userRepository.save(user);
+    }
+
+    public User getUserByEmail(String email) {
+        return userRepository.findByEmail(email).orElseThrow(
+                () -> new ResourceNotFoundException("User with Email " + email + " not found"));
     }
 }

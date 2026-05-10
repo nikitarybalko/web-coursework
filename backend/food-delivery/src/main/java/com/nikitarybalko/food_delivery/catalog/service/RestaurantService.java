@@ -26,4 +26,9 @@ public class RestaurantService {
 
         return restaurantMapper.toResponse(restaurant);
     }
+
+    public Restaurant getRestaurantById(Long id) {
+        return restaurantRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Restaurant with id " + id + " not found"));
+    }
 }
