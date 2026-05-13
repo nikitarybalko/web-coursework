@@ -1,4 +1,4 @@
-package org.nikitarybalko.food_delivery.order.dto;
+package com.nikitarybalko.food_delivery.order.dto;
 
 import jakarta.validation.constraints.NotNull;
 

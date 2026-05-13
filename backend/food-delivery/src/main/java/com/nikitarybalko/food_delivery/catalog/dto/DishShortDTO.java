@@ -1,4 +1,4 @@
-package org.nikitarybalko.food_delivery.catalog.dto;
+package com.nikitarybalko.food_delivery.catalog.dto;
 
 import java.math.BigDecimal;
 
@@ -7,6 +7,7 @@ public record DishShortDTO(
         String name,
         BigDecimal price,
         String imagePath,
-        String description
+        String description,
+        Long restaurantId
 ) {
 }

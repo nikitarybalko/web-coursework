@@ -1,4 +1,4 @@
-package org.nikitarybalko.food_delivery.user.model;
+package com.nikitarybalko.food_delivery.user.model;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
@@ -8,8 +8,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
-import org.nikitarybalko.food_delivery.user.enums.AuthProvider;
-import org.nikitarybalko.food_delivery.user.enums.Role;
+import com.nikitarybalko.food_delivery.user.enums.AuthProvider;
+import com.nikitarybalko.food_delivery.user.enums.Role;
 
 @Entity
 @Table(name = "users")

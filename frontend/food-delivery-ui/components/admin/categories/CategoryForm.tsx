@@ -89,7 +89,7 @@ export default function CategoryForm({
     async function fetchCategories() {
       try {
         const res = await fetch(
-          `${process.env.NEXT_PUBLIC_API_URL}/api/categories`,
+          `${process.env.NEXT_PUBLIC_API_URL}/categories`,
         );
         if (res.ok) {
           const data = await res.json();
@@ -133,7 +133,7 @@ export default function CategoryForm({
       if (mode === "select") {
         if (!selectedExistingId) throw new Error("Оберіть категорію зі списку");
 
-        const url = `${process.env.NEXT_PUBLIC_API_URL}/api/restaurants/my/categories/${selectedExistingId}`;
+        const url = `${process.env.NEXT_PUBLIC_API_URL}/restaurants/my/categories/${selectedExistingId}`;
         const res = await fetch(url, {
           method: "POST",
           headers: { Authorization: `Bearer ${token}` },
@@ -153,6 +153,7 @@ export default function CategoryForm({
         if (imageFile) {
           const fileData = new FormData();
           fileData.append("file", imageFile);
+          fileData.append("folder", "categories");
           const uploadRes = await fetch("/api/upload", {
             method: "POST",
             body: fileData,
@@ -171,8 +172,8 @@ export default function CategoryForm({
         };
 
         const url = isEditing
-          ? `${process.env.NEXT_PUBLIC_API_URL}/api/categories/${initialData?.id}`
-          : `${process.env.NEXT_PUBLIC_API_URL}/api/categories`;
+          ? `${process.env.NEXT_PUBLIC_API_URL}/categories/${initialData?.id}`
+          : `${process.env.NEXT_PUBLIC_API_URL}/categories`;
 
         const res = await fetch(url, {
           method: isEditing ? "PUT" : "POST",
@@ -192,15 +193,19 @@ export default function CategoryForm({
 
       router.refresh();
       if (onSuccess) setTimeout(onSuccess, 1000);
-    } catch (error: any) {
-      setMessage({ type: "error", text: error.message || "Виникла помилка." });
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        setMessage({ type: "error", text: error.message });
+      } else {
+        setMessage({ type: "error", text: "Виникла помилка." });
+      }
     } finally {
       setIsLoading(false);
     }
   };
 
   return (
-    <div className="bg-white rounded-2xl shadow-xl w-full overflow-hidden">
+    <div className="bg-white rounded-2xl shadow-sm w-full overflow-hidden">
       <div className="flex items-center justify-between p-6 border-b border-gray-100 bg-gray-50/50">
         <div className="flex items-center gap-3">
           <div className="p-2 bg-green-50 text-brand-green-primary rounded-lg">

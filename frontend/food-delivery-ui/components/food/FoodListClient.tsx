@@ -12,6 +12,8 @@ interface FoodListClientProps {
   initialHasMore: boolean;
   currentSearch?: string;
   currentCategoryId?: string;
+  currentSort?: string;
+  currentRestaurantId: string;
 }
 
 export default function FoodListClient({
@@ -19,6 +21,8 @@ export default function FoodListClient({
   initialHasMore,
   currentSearch,
   currentCategoryId,
+  currentSort,
+  currentRestaurantId,
 }: FoodListClientProps) {
   const [dishes, setDishes] = useState<Dish[]>(initialDishes);
   const [page, setPage] = useState(1);
@@ -29,19 +33,27 @@ export default function FoodListClient({
     setDishes(initialDishes);
     setHasMore(initialHasMore);
     setPage(1);
-  }, [initialDishes, initialHasMore, currentSearch, currentCategoryId]);
+  }, [
+    initialDishes,
+    initialHasMore,
+    currentSearch,
+    currentCategoryId,
+    currentSort,
+  ]);
 
   const loadMoreDishes = async () => {
     if (isLoading || !hasMore) return;
     setIsLoading(true);
 
     try {
-      const pageData = await fetchAllDishes(
-        page,
-        12,
-        currentSearch,
-        currentCategoryId,
-      );
+      const pageData = await fetchAllDishes({
+        page: page,
+        size: 12,
+        search: currentSearch,
+        categoryId: currentCategoryId,
+        restaurantId: currentRestaurantId,
+        sort: currentSort,
+      });
 
       setDishes((prev) => [...prev, ...pageData.content]);
       setHasMore(pageData.page.number + 1 < pageData.page.totalPages);
@@ -63,13 +75,7 @@ export default function FoodListClient({
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 w-full">
         {dishes.map((dish) => (
-          <FoodCard
-            key={dish.id}
-            title={dish.name}
-            tags={dish.description}
-            imagePath={dish.imagePath}
-            price={dish.price}
-          />
+          <FoodCard key={dish.id} dish={dish} />
         ))}
       </div>
 

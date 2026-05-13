@@ -1,11 +1,11 @@
-package org.nikitarybalko.food_delivery.catalog.service;
+package com.nikitarybalko.food_delivery.catalog.service;
 
 import lombok.RequiredArgsConstructor;
-import org.nikitarybalko.food_delivery.catalog.dto.CategoryWithDishesDTO;
-import org.nikitarybalko.food_delivery.catalog.mapper.MenuMapper;
-import org.nikitarybalko.food_delivery.catalog.model.Category;
-import org.nikitarybalko.food_delivery.catalog.model.Dish;
-import org.nikitarybalko.food_delivery.catalog.repository.DishRepository;
+import com.nikitarybalko.food_delivery.catalog.dto.CategoryWithDishesDTO;
+import com.nikitarybalko.food_delivery.catalog.mapper.MenuMapper;
+import com.nikitarybalko.food_delivery.catalog.model.Category;
+import com.nikitarybalko.food_delivery.catalog.model.Dish;
+import com.nikitarybalko.food_delivery.catalog.repository.DishRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

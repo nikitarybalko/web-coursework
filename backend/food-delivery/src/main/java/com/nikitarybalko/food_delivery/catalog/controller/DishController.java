@@ -1,11 +1,12 @@
-package org.nikitarybalko.food_delivery.catalog.controller;
+package com.nikitarybalko.food_delivery.catalog.controller;
 
+import com.nikitarybalko.food_delivery.catalog.dto.*;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.nikitarybalko.food_delivery.catalog.dto.*;
-import org.nikitarybalko.food_delivery.catalog.service.DishService;
-import org.nikitarybalko.food_delivery.catalog.service.MenuService;
-import org.nikitarybalko.food_delivery.catalog.service.RestaurantService;
+import com.nikitarybalko.food_delivery.catalog.dto.*;
+import com.nikitarybalko.food_delivery.catalog.service.DishService;
+import com.nikitarybalko.food_delivery.catalog.service.MenuService;
+import com.nikitarybalko.food_delivery.catalog.service.RestaurantService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -29,8 +30,9 @@ public class DishController {
     public ResponseEntity<Page<DishShortDTO>> getDishes(
             @RequestParam(required = false) String search,
             @RequestParam(required = false) Long categoryId,
+            @RequestParam(required = false) Long restaurantId,
             @PageableDefault(size = 12) Pageable pageable) {
-        return ResponseEntity.ok(dishService.getDishes(pageable, search, categoryId));
+        return ResponseEntity.ok(dishService.getDishes(pageable, search, categoryId, restaurantId));
     }
 
     @GetMapping("/menu")

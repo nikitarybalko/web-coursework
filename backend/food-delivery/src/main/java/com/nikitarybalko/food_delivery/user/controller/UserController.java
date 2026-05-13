@@ -1,14 +1,14 @@
-package org.nikitarybalko.food_delivery.user.controller;
+package com.nikitarybalko.food_delivery.user.controller;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.nikitarybalko.food_delivery.user.dto.UserResponse;
-import org.nikitarybalko.food_delivery.user.dto.UserUpdateRequest;
-import org.nikitarybalko.food_delivery.user.enums.AuthProvider;
-import org.nikitarybalko.food_delivery.user.enums.Role;
-import org.nikitarybalko.food_delivery.user.model.User;
-import org.nikitarybalko.food_delivery.user.repository.UserRepository;
-import org.nikitarybalko.food_delivery.user.service.UserService;
+import com.nikitarybalko.food_delivery.user.dto.UserResponse;
+import com.nikitarybalko.food_delivery.user.dto.UserUpdateRequest;
+import com.nikitarybalko.food_delivery.user.enums.AuthProvider;
+import com.nikitarybalko.food_delivery.user.enums.Role;
+import com.nikitarybalko.food_delivery.user.model.User;
+import com.nikitarybalko.food_delivery.user.repository.UserRepository;
+import com.nikitarybalko.food_delivery.user.service.UserService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.jwt.Jwt;

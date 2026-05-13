@@ -1,4 +1,4 @@
-package org.nikitarybalko.food_delivery.catalog.model;
+package com.nikitarybalko.food_delivery.catalog.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;

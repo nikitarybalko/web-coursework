@@ -1,4 +1,4 @@
-package org.nikitarybalko.food_delivery.user.dto;
+package com.nikitarybalko.food_delivery.user.dto;
 
 public record UserResponse(
 

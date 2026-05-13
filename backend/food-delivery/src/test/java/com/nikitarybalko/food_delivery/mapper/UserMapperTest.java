@@ -1,12 +1,12 @@
-package org.nikitarybalko.food_delivery.mapper;
+package com.nikitarybalko.food_delivery.mapper;
 
 import org.junit.jupiter.api.Test;
 import org.mapstruct.factory.Mappers;
-import org.nikitarybalko.food_delivery.user.dto.UserResponse;
-import org.nikitarybalko.food_delivery.user.enums.AuthProvider;
-import org.nikitarybalko.food_delivery.user.enums.Role;
-import org.nikitarybalko.food_delivery.user.model.User;
-import org.nikitarybalko.food_delivery.user.mapper.UserMapper;
+import com.nikitarybalko.food_delivery.user.dto.UserResponse;
+import com.nikitarybalko.food_delivery.user.enums.AuthProvider;
+import com.nikitarybalko.food_delivery.user.enums.Role;
+import com.nikitarybalko.food_delivery.user.model.User;
+import com.nikitarybalko.food_delivery.user.mapper.UserMapper;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;

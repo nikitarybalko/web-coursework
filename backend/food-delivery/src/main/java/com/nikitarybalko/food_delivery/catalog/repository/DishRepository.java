@@ -1,6 +1,6 @@
-package org.nikitarybalko.food_delivery.catalog.repository;
+package com.nikitarybalko.food_delivery.catalog.repository;
 
-import org.nikitarybalko.food_delivery.catalog.model.Dish;
+import com.nikitarybalko.food_delivery.catalog.model.Dish;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.EntityGraph;
@@ -20,10 +20,12 @@ public interface DishRepository extends JpaRepository<Dish, Long> {
             "WHERE (:search = '' OR " +
             "       LOWER(d.name) LIKE LOWER(CONCAT('%', :search, '%')) OR " +
             "       LOWER(d.description) LIKE LOWER(CONCAT('%', :search, '%'))) " +
+            "AND (:restaurantId IS NULL OR d.restaurant.id = :restaurantId) " +
             "AND (:categoryId IS NULL OR c.id = :categoryId)")
     Page<Dish> findFilteredDishes(
             @Param("search") String search,
             @Param("categoryId") Long categoryId,
+            @Param("restaurantId") long restaurantId,
             Pageable pageable
     );
 }

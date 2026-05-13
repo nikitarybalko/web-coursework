@@ -7,6 +7,8 @@ export async function POST(request: Request) {
     const data = await request.formData();
     const file: File | null = data.get("file") as unknown as File;
 
+    const folderName = (data.get("folder") as string) || "misc";
+
     if (!file) {
       return NextResponse.json({ error: "Файл не знайдено" }, { status: 400 });
     }
@@ -17,14 +19,15 @@ export async function POST(request: Request) {
     const uniqueSuffix = `${Date.now()}-${Math.round(Math.random() * 1e9)}`;
     const filename = `${uniqueSuffix}-${file.name.replace(/\s+/g, "-")}`;
 
-    const uploadDir = path.join(process.cwd(), "public/uploads/categories");
+    const safeFolder = folderName.replace(/[^a-zA-Z0-9_-]/g, "");
+
+    const uploadDir = path.join(process.cwd(), `public/uploads/${safeFolder}`);
     await mkdir(uploadDir, { recursive: true });
 
     const filepath = path.join(uploadDir, filename);
-
     await writeFile(filepath, buffer);
 
-    const imagePath = `/uploads/categories/${filename}`;
+    const imagePath = `/uploads/${safeFolder}/${filename}`;
 
     return NextResponse.json({ imagePath }, { status: 201 });
   } catch (error) {

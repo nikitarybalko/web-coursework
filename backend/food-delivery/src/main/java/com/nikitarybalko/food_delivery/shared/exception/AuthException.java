@@ -1,4 +1,4 @@
-package org.nikitarybalko.food_delivery.shared.exception;
+package com.nikitarybalko.food_delivery.shared.exception;
 
 import lombok.Getter;
 import org.springframework.http.HttpStatus;

@@ -1,14 +1,13 @@
-package org.nikitarybalko.food_delivery.catalog.mapper;
+package com.nikitarybalko.food_delivery.catalog.mapper;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;
-import org.nikitarybalko.food_delivery.catalog.dto.CategoryAddRequest;
-import org.nikitarybalko.food_delivery.catalog.dto.CategoryResponse;
-import org.nikitarybalko.food_delivery.catalog.model.Category;
+import com.nikitarybalko.food_delivery.catalog.dto.CategoryAddRequest;
+import com.nikitarybalko.food_delivery.catalog.dto.CategoryResponse;
+import com.nikitarybalko.food_delivery.catalog.model.Category;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Mapper
 public interface CategoryMapper {

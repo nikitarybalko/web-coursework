@@ -1,20 +1,21 @@
-package org.nikitarybalko.food_delivery.catalog.service;
+package com.nikitarybalko.food_delivery.catalog.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.nikitarybalko.food_delivery.catalog.model.Category;
-import org.nikitarybalko.food_delivery.catalog.repository.CategoryRepository;
-import org.nikitarybalko.food_delivery.catalog.dto.CategoryAddRequest;
-import org.nikitarybalko.food_delivery.catalog.dto.CategoryEditRequest;
-import org.nikitarybalko.food_delivery.catalog.dto.CategoryResponse;
-import org.nikitarybalko.food_delivery.catalog.mapper.CategoryMapper;
-import org.nikitarybalko.food_delivery.shared.exception.ResourceNotFoundException;
+import com.nikitarybalko.food_delivery.catalog.model.Category;
+import com.nikitarybalko.food_delivery.catalog.repository.CategoryRepository;
+import com.nikitarybalko.food_delivery.catalog.dto.CategoryAddRequest;
+import com.nikitarybalko.food_delivery.catalog.dto.CategoryEditRequest;
+import com.nikitarybalko.food_delivery.catalog.dto.CategoryResponse;
+import com.nikitarybalko.food_delivery.catalog.mapper.CategoryMapper;
+import com.nikitarybalko.food_delivery.shared.exception.ResourceNotFoundException;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -37,6 +38,13 @@ public class CategoryService {
         return categoryMapper.toResponseList(categories);
     }
 
+    public List<CategoryResponse> getCategoriesByRestaurant(Long restaurantId) {
+        return categoryRepository.findCategoriesByRestaurantId(restaurantId)
+                .stream()
+                .map(categoryMapper::toResponse)
+                .collect(Collectors.toList());
+    }
+
     @Transactional
     public CategoryResponse addCategory(CategoryAddRequest request) {
         Category category = categoryMapper.toEntity(request);
@@ -46,11 +54,15 @@ public class CategoryService {
 
     @Transactional
     public CategoryResponse updateCategory(Long id, CategoryEditRequest request) {
+        log.info("Updating category with id: {}", id);
         Category existingCategory = categoryRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Category not found: " + id));
 
-        Category parentCategory = categoryRepository.findById(request.parentId())
-                .orElseThrow(() -> new ResourceNotFoundException("Category not found: " + request.parentId()));
+        Category parentCategory = null;
+        if (request.parentId() != null) {
+            parentCategory = categoryRepository.findById(request.parentId())
+                    .orElseThrow(() -> new ResourceNotFoundException("Parent category not found: " + request.parentId()));
+        }
 
         existingCategory.setName(request.name());
         existingCategory.setImagePath(request.imagePath());

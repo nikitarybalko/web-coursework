@@ -1,13 +1,13 @@
-package org.nikitarybalko.food_delivery.user.controller;
+package com.nikitarybalko.food_delivery.user.controller;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.nikitarybalko.food_delivery.user.dto.AuthResponse;
-import org.nikitarybalko.food_delivery.user.dto.GoogleAuthRequest;
-import org.nikitarybalko.food_delivery.user.service.AuthService;
-import org.nikitarybalko.food_delivery.user.dto.LoginRequest;
-import org.nikitarybalko.food_delivery.user.dto.RegistrationRequest;
+import com.nikitarybalko.food_delivery.user.dto.AuthResponse;
+import com.nikitarybalko.food_delivery.user.dto.GoogleAuthRequest;
+import com.nikitarybalko.food_delivery.user.service.AuthService;
+import com.nikitarybalko.food_delivery.user.dto.LoginRequest;
+import com.nikitarybalko.food_delivery.user.dto.RegistrationRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;

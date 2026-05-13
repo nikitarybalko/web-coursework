@@ -1,6 +1,6 @@
-package org.nikitarybalko.food_delivery.order.dto;
+package com.nikitarybalko.food_delivery.order.dto;
 
-import org.nikitarybalko.food_delivery.order.model.OrderStatus;
+import com.nikitarybalko.food_delivery.order.model.OrderStatus;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;

@@ -1,18 +1,19 @@
-package org.nikitarybalko.food_delivery.catalog.service;
+package com.nikitarybalko.food_delivery.catalog.service;
 
 import lombok.RequiredArgsConstructor;
-import org.nikitarybalko.food_delivery.catalog.dto.DishCreateRequest;
-import org.nikitarybalko.food_delivery.catalog.dto.DishResponse;
-import org.nikitarybalko.food_delivery.catalog.dto.DishShortDTO;
-import org.nikitarybalko.food_delivery.catalog.dto.DishUpdateRequest;
-import org.nikitarybalko.food_delivery.catalog.mapper.DishMapper;
-import org.nikitarybalko.food_delivery.catalog.model.Category;
-import org.nikitarybalko.food_delivery.catalog.model.Dish;
-import org.nikitarybalko.food_delivery.catalog.model.Restaurant;
-import org.nikitarybalko.food_delivery.catalog.repository.CategoryRepository;
-import org.nikitarybalko.food_delivery.catalog.repository.DishRepository;
-import org.nikitarybalko.food_delivery.catalog.repository.RestaurantRepository;
-import org.nikitarybalko.food_delivery.shared.exception.ResourceNotFoundException;
+import com.nikitarybalko.food_delivery.catalog.dto.DishCreateRequest;
+import com.nikitarybalko.food_delivery.catalog.dto.DishResponse;
+import com.nikitarybalko.food_delivery.catalog.dto.DishShortDTO;
+import com.nikitarybalko.food_delivery.catalog.dto.DishUpdateRequest;
+import com.nikitarybalko.food_delivery.catalog.mapper.DishMapper;
+import com.nikitarybalko.food_delivery.catalog.model.Category;
+import com.nikitarybalko.food_delivery.catalog.model.Dish;
+import com.nikitarybalko.food_delivery.catalog.model.Restaurant;
+import com.nikitarybalko.food_delivery.catalog.repository.CategoryRepository;
+import com.nikitarybalko.food_delivery.catalog.repository.DishRepository;
+import com.nikitarybalko.food_delivery.catalog.repository.RestaurantRepository;
+import com.nikitarybalko.food_delivery.shared.exception.ResourceNotFoundException;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.access.AccessDeniedException;
@@ -22,6 +23,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.HashSet;
 import java.util.Set;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class DishService {
@@ -31,12 +33,14 @@ public class DishService {
     private final RestaurantRepository restaurantRepository;
     private final DishMapper dishMapper;
 
-    public Page<DishShortDTO> getDishes(Pageable pageable, String search, Long categoryId) {
+    public Page<DishShortDTO> getDishes(Pageable pageable, String search, Long categoryId, Long restaurantId) {
         String safeSearch = (search == null) ? "" : search.trim();
 
-        Page<Dish> dishPage = dishRepository.findFilteredDishes(safeSearch, categoryId, pageable);
+        Page<Dish> dishPage = dishRepository.findFilteredDishes(safeSearch, categoryId, restaurantId, pageable);
 
-        return dishPage.map(dishMapper::toDishShortDTO);
+        Page<DishShortDTO> mappedDishes = dishPage.map(dishMapper::toDishShortDTO);
+        mappedDishes.forEach(dish -> log.info("Dish restaurantId: {}", dish.restaurantId()));
+        return mappedDishes;
     }
 
     @Transactional

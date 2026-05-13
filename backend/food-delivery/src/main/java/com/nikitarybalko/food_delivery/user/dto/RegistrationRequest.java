@@ -1,4 +1,4 @@
-package org.nikitarybalko.food_delivery.user.dto;
+package com.nikitarybalko.food_delivery.user.dto;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;

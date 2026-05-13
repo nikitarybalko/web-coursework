@@ -1,6 +1,6 @@
-package org.nikitarybalko.food_delivery.catalog.repository;
+package com.nikitarybalko.food_delivery.catalog.repository;
 
-import org.nikitarybalko.food_delivery.catalog.model.Restaurant;
+import com.nikitarybalko.food_delivery.catalog.model.Restaurant;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

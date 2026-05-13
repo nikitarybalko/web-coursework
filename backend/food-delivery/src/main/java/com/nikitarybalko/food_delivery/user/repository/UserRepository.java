@@ -1,6 +1,6 @@
-package org.nikitarybalko.food_delivery.user.repository;
+package com.nikitarybalko.food_delivery.user.repository;
 
-import org.nikitarybalko.food_delivery.user.model.User;
+import com.nikitarybalko.food_delivery.user.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

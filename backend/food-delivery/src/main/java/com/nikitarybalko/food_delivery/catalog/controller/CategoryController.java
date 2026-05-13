@@ -1,11 +1,11 @@
-package org.nikitarybalko.food_delivery.catalog.controller;
+package com.nikitarybalko.food_delivery.catalog.controller;
 
+import com.nikitarybalko.food_delivery.catalog.dto.CategoryAddRequest;
+import com.nikitarybalko.food_delivery.catalog.dto.CategoryEditRequest;
+import com.nikitarybalko.food_delivery.catalog.dto.CategoryResponse;
+import com.nikitarybalko.food_delivery.catalog.service.CategoryService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.nikitarybalko.food_delivery.catalog.service.CategoryService;
-import org.nikitarybalko.food_delivery.catalog.dto.CategoryAddRequest;
-import org.nikitarybalko.food_delivery.catalog.dto.CategoryEditRequest;
-import org.nikitarybalko.food_delivery.catalog.dto.CategoryResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -25,6 +25,12 @@ public class CategoryController {
             @RequestParam(required = false) Integer limit) {
 
         List<CategoryResponse> categories = categoryService.getRootCategories(limit);
+        return ResponseEntity.ok(categories);
+    }
+
+    @GetMapping("/restaurant/{restaurantId}")
+    public ResponseEntity<List<CategoryResponse>> getCategoriesByRestaurant(@PathVariable Long restaurantId) {
+        List<CategoryResponse> categories = categoryService.getCategoriesByRestaurant(restaurantId);
         return ResponseEntity.ok(categories);
     }
 

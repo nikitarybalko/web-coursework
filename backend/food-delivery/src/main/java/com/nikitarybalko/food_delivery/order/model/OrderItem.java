@@ -1,8 +1,8 @@
-package org.nikitarybalko.food_delivery.order.model;
+package com.nikitarybalko.food_delivery.order.model;
 
 import jakarta.persistence.*;
 import lombok.*;
-import org.nikitarybalko.food_delivery.catalog.model.Dish;
+import com.nikitarybalko.food_delivery.catalog.model.Dish;
 
 import java.math.BigDecimal;
 

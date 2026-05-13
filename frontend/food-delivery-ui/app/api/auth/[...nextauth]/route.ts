@@ -25,7 +25,7 @@ export const authOptions: AuthOptions = {
 
         try {
           const res = await fetch(
-            `${process.env.NEXT_PUBLIC_API_URL}/api/auth/login`,
+            `${process.env.INTERNAL_API_URL}/auth/login`,
             {
               method: "POST",
               headers: { "Content-Type": "application/json" },
@@ -67,7 +67,7 @@ export const authOptions: AuthOptions = {
       if (account?.provider === "google" && user) {
         try {
           const res = await fetch(
-            `${process.env.NEXT_PUBLIC_API_URL}/api/auth/google`,
+            `${process.env.INTERNAL_API_URL}/auth/google`,
             {
               method: "POST",
               headers: { "Content-Type": "application/json" },
@@ -141,7 +141,7 @@ export const authOptions: AuthOptions = {
       if (token.idToken) {
         try {
           const res = await fetch(
-            `${process.env.NEXT_PUBLIC_API_URL}/api/users/sync`,
+            `${process.env.INTERNAL_API_URL}/users/sync`,
             {
               method: "POST",
               headers: {

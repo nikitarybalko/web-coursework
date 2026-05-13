@@ -1,16 +1,16 @@
-package org.nikitarybalko.food_delivery.user.service;
+package com.nikitarybalko.food_delivery.user.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.nikitarybalko.food_delivery.user.dto.AuthResponse;
-import org.nikitarybalko.food_delivery.user.dto.GoogleAuthRequest;
-import org.nikitarybalko.food_delivery.user.model.User;
-import org.nikitarybalko.food_delivery.user.repository.UserRepository;
-import org.nikitarybalko.food_delivery.user.dto.LoginRequest;
-import org.nikitarybalko.food_delivery.user.dto.RegistrationRequest;
-import org.nikitarybalko.food_delivery.shared.exception.AuthException;
-import org.nikitarybalko.food_delivery.user.enums.AuthProvider;
-import org.nikitarybalko.food_delivery.user.enums.Role;
+import com.nikitarybalko.food_delivery.user.dto.AuthResponse;
+import com.nikitarybalko.food_delivery.user.dto.GoogleAuthRequest;
+import com.nikitarybalko.food_delivery.user.model.User;
+import com.nikitarybalko.food_delivery.user.repository.UserRepository;
+import com.nikitarybalko.food_delivery.user.dto.LoginRequest;
+import com.nikitarybalko.food_delivery.user.dto.RegistrationRequest;
+import com.nikitarybalko.food_delivery.shared.exception.AuthException;
+import com.nikitarybalko.food_delivery.user.enums.AuthProvider;
+import com.nikitarybalko.food_delivery.user.enums.Role;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.jose.jws.MacAlgorithm;

@@ -1,11 +1,11 @@
-package org.nikitarybalko.food_delivery.user.service;
+package com.nikitarybalko.food_delivery.user.service;
 
 import lombok.RequiredArgsConstructor;
-import org.nikitarybalko.food_delivery.shared.exception.ResourceNotFoundException;
-import org.nikitarybalko.food_delivery.user.dto.UserUpdateRequest;
-import org.nikitarybalko.food_delivery.user.mapper.UserMapper;
-import org.nikitarybalko.food_delivery.user.model.User;
-import org.nikitarybalko.food_delivery.user.repository.UserRepository;
+import com.nikitarybalko.food_delivery.shared.exception.ResourceNotFoundException;
+import com.nikitarybalko.food_delivery.user.dto.UserUpdateRequest;
+import com.nikitarybalko.food_delivery.user.mapper.UserMapper;
+import com.nikitarybalko.food_delivery.user.model.User;
+import com.nikitarybalko.food_delivery.user.repository.UserRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

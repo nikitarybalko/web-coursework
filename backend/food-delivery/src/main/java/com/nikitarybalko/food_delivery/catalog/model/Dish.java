@@ -1,4 +1,4 @@
-package org.nikitarybalko.food_delivery.catalog.model;
+package com.nikitarybalko.food_delivery.catalog.model;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;

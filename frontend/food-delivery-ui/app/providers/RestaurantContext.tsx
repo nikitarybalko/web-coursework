@@ -26,11 +26,9 @@ export const RestaurantProvider = ({
 
   useEffect(() => {
     const fetchRestaurant = async () => {
-      if (session?.user?.email) {
+      if (session?.idToken) {
         try {
-          const response = await fetchRestaurantByOwnerEmail(
-            session.user.email,
-          );
+          const response = await fetchRestaurantByOwnerEmail(session.idToken);
           setRestaurant(response);
         } catch (error) {
           console.error("Помилка завантаження ресторану", error);
@@ -41,7 +39,7 @@ export const RestaurantProvider = ({
     };
 
     fetchRestaurant();
-  }, [session?.user?.email]);
+  }, [session?.idToken]);
 
   return (
     <RestaurantContext.Provider value={{ restaurant, isLoading }}>

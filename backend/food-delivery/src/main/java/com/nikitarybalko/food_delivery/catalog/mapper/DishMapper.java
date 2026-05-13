@@ -1,10 +1,11 @@
-package org.nikitarybalko.food_delivery.catalog.mapper;
+package com.nikitarybalko.food_delivery.catalog.mapper;
 
 import org.mapstruct.Mapper;
-import org.nikitarybalko.food_delivery.catalog.dto.DishCreateRequest;
-import org.nikitarybalko.food_delivery.catalog.dto.DishResponse;
-import org.nikitarybalko.food_delivery.catalog.dto.DishShortDTO;
-import org.nikitarybalko.food_delivery.catalog.model.Dish;
+import com.nikitarybalko.food_delivery.catalog.dto.DishCreateRequest;
+import com.nikitarybalko.food_delivery.catalog.dto.DishResponse;
+import com.nikitarybalko.food_delivery.catalog.dto.DishShortDTO;
+import com.nikitarybalko.food_delivery.catalog.model.Dish;
+import org.mapstruct.Mapping;
 
 @Mapper
 public interface DishMapper {
@@ -13,5 +14,6 @@ public interface DishMapper {
 
     Dish toModel(DishCreateRequest dishCreateRequest);
 
+    @Mapping(source = "restaurant.id", target = "restaurantId")
     DishShortDTO toDishShortDTO(Dish dish);
 }

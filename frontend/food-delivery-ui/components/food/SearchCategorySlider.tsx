@@ -3,7 +3,7 @@
 import { CategorySliderProps } from "@/types/Categories";
 import { X } from "lucide-react";
 import Image from "next/image";
-import { useRouter, useSearchParams } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import React, { useEffect, useRef, useState } from "react";
 
 export default function SearchCategorySlider({
@@ -16,6 +16,7 @@ export default function SearchCategorySlider({
 
   const router = useRouter();
   const searchParams = useSearchParams();
+  const pathname = usePathname();
   const currentCategoryId = searchParams.get("categoryId");
 
   const checkScroll = () => {
@@ -38,7 +39,7 @@ export default function SearchCategorySlider({
     }
     params.delete("page");
 
-    router.push(`/food?${params.toString()}`, { scroll: false });
+    router.push(`${pathname}?${params.toString()}`, { scroll: false });
   };
 
   useEffect(() => {

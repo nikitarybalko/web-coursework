@@ -2,6 +2,8 @@ export interface Restaurant {
   id: number;
   name: string;
   address: string;
+  description: string;
+  imagePath: string;
   tags: string[];
   rating: number;
 }
@@ -22,4 +24,14 @@ export interface Dish {
   price: number;
   imagePath: string;
   description: string;
+  restaurantId: number;
+}
+
+export interface FetchDishesParams {
+  page?: number;
+  size?: number;
+  search?: string;
+  categoryId?: string;
+  restaurantId?: string;
+  sort?: string;
 }

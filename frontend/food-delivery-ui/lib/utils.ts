@@ -1,17 +1,29 @@
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
 import { Category } from "@/types/Categories";
-import { CategoryWithDishes, Dish, Restaurant } from "@/types/Restaurant";
+import {
+  CategoryWithDishes,
+  Dish,
+  FetchDishesParams,
+  Restaurant,
+} from "@/types/Restaurant";
 import { PageResponse } from "@/types/Pagination";
-import { useSession } from "next-auth/react";
+import { OrderResponse } from "@/types/Order";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
+export const getBaseUrl = () => {
+  if (typeof window === "undefined") {
+    return process.env.INTERNAL_API_URL; // http://localhost:8080
+  }
+  return process.env.NEXT_PUBLIC_API_URL; // /api
+};
+
 export async function authFetch(url: string, options: RequestInit = {}) {
   try {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}${url}`, {
+    const response = await fetch(`${getBaseUrl()}${url}`, {
       ...options,
     });
 
@@ -23,7 +35,7 @@ export async function authFetch(url: string, options: RequestInit = {}) {
 }
 
 export async function fetchCategories(limit: number = 0): Promise<Category[]> {
-  const baseUrl = `${process.env.NEXT_PUBLIC_API_URL}/api/categories`;
+  const baseUrl = `${getBaseUrl()}/categories`;
   const url = limit ? `${baseUrl}?limit=${limit}` : baseUrl;
 
   try {
@@ -43,10 +55,23 @@ export async function fetchCategories(limit: number = 0): Promise<Category[]> {
   }
 }
 
-export async function fetchRestaurantByOwnerEmail(
-  email: string,
-): Promise<Restaurant | null> {
-  const url = `${process.env.NEXT_PUBLIC_API_URL}/api/restaurants?email=${email}`;
+export async function fetchCategoriesByRestaurant(
+  restaurantId: string,
+): Promise<Category[]> {
+  const url = `${getBaseUrl()}/categories/restaurant/${restaurantId}`;
+
+  try {
+    const res = await fetch(url, { cache: "no-store" });
+    if (!res.ok) throw new Error("Помилка завантаження категорій ресторану");
+    return await res.json();
+  } catch (error) {
+    console.error(error);
+    return [];
+  }
+}
+
+export async function fetchAllRestaurants(): Promise<Restaurant[]> {
+  const url = `${getBaseUrl()}/restaurants`;
   try {
     const response = await fetch(url);
 
@@ -56,19 +81,39 @@ export async function fetchRestaurantByOwnerEmail(
       );
     }
 
-    const restaurant = await response.json();
-    return restaurant;
+    return await response.json();
   } catch (error) {
-    console.error("Помилка при завантаженні ресторану:", error);
-    return null;
+    console.error("Помилка при завантаженні ресторанів:", error);
+    return [];
   }
+}
+
+export async function fetchRestaurantByOwnerEmail(
+  token: string,
+): Promise<Restaurant | null> {
+  const url = `${getBaseUrl()}/restaurants/owner`;
+
+  const res = await fetch(url, {
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    cache: "no-store",
+  });
+
+  if (!res.ok) {
+    if (res.status === 401) throw new Error("Не авторизовано (401)");
+    throw new Error("Помилка завантаження ресторанів");
+  }
+
+  return res.json();
 }
 
 export async function fetchMenuForRestaurant(
   restaurantId: number,
   token?: string,
 ): Promise<CategoryWithDishes[]> {
-  const url = `${process.env.NEXT_PUBLIC_API_URL}/api/dishes/menu?restaurantId=${restaurantId}`;
+  const url = `${getBaseUrl()}/dishes/menu?restaurantId=${restaurantId}`;
 
   const headers: HeadersInit = {
     "Content-Type": "application/json",
@@ -95,13 +140,14 @@ export async function fetchMenuForRestaurant(
   }
 }
 
-export async function fetchAllDishes(
-  page: number = 0,
-  size: number = 12,
-  search?: string,
-  categoryId?: string,
-): Promise<PageResponse<Dish>> {
-  console.log("In utils.ts: ", categoryId);
+export async function fetchAllDishes({
+  page = 0,
+  size = 12,
+  search,
+  categoryId,
+  restaurantId,
+  sort,
+}: FetchDishesParams = {}): Promise<PageResponse<Dish>> {
   const query = new URLSearchParams({
     page: page.toString(),
     size: size.toString(),
@@ -109,9 +155,35 @@ export async function fetchAllDishes(
 
   if (search) query.append("search", search);
   if (categoryId) query.append("categoryId", categoryId);
+  if (restaurantId) query.append("restaurantId", restaurantId);
 
-  const url = `${process.env.NEXT_PUBLIC_API_URL}/api/dishes?${query.toString()}`;
-  console.log("Resulting URL: ", url);
+  if (sort === "cheap") {
+    query.append("sort", "price,asc");
+  } else if (sort === "expensive") {
+    query.append("sort", "price,desc");
+  }
+
+  const url = `${getBaseUrl()}/dishes?${query.toString()}`;
+
+  try {
+    const response = await fetch(url, { cache: "no-store" });
+
+    if (!response.ok) {
+      throw new Error(
+        `Помилка HTTP: ${response.status} ${response.statusText}`,
+      );
+    }
+
+    return await response.json();
+  } catch (error) {
+    throw new Error("Помилка при завантаженні меню:" + error);
+  }
+}
+
+export async function getRestaurantById(
+  restaurantId: string,
+): Promise<Restaurant> {
+  const url = `${getBaseUrl()}/restaurants/${restaurantId}`;
   try {
     const response = await fetch(url);
 
@@ -123,6 +195,67 @@ export async function fetchAllDishes(
 
     return await response.json();
   } catch (error) {
-    throw new Error("Помилка при завантаженні меню:" + error);
+    throw new Error("Помилка при завантаженні ресторану:" + error);
+  }
+}
+
+export async function fetchMyOrders(token: string): Promise<OrderResponse[]> {
+  const url = `${getBaseUrl()}/orders/my`;
+  try {
+    const res = await fetch(url, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      cache: "no-store",
+    });
+    if (!res.ok) throw new Error("Помилка завантаження замовлень");
+    return await res.json();
+  } catch (error) {
+    console.error(error);
+    return [];
+  }
+}
+
+export async function fetchRestaurantOrders(
+  token: string,
+): Promise<OrderResponse[]> {
+  const url = `${getBaseUrl()}/orders/restaurant`;
+  try {
+    const res = await fetch(url, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      cache: "no-store",
+    });
+    if (!res.ok) throw new Error("Помилка завантаження замовлень");
+    const jsonResponse = await res.json();
+    console.log("ORDER:");
+    console.log(jsonResponse);
+    return jsonResponse;
+  } catch (error) {
+    console.error(error);
+    return [];
+  }
+}
+
+export async function updateOrderStatus(
+  orderId: number,
+  status: string,
+  token: string,
+): Promise<boolean> {
+  const url = `${getBaseUrl()}/orders/${orderId}/status?status=${status}`;
+  try {
+    const res = await fetch(url, {
+      method: "PATCH",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return res.ok;
+  } catch (error) {
+    console.error("Помилка оновлення статусу:", error);
+    return false;
   }
 }

@@ -1,4 +1,4 @@
-package org.nikitarybalko.food_delivery.catalog.model;
+package com.nikitarybalko.food_delivery.catalog.model;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
@@ -6,7 +6,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
-import org.nikitarybalko.food_delivery.user.model.User;
+import com.nikitarybalko.food_delivery.user.model.User;
 
 import java.util.List;
 
@@ -27,6 +27,10 @@ public class Restaurant {
     private String name;
 
     private String address;
+
+    private String description;
+
+    private String imagePath;
 
     @JdbcTypeCode(SqlTypes.ARRAY)
     @Column(name = "tags", columnDefinition = "text[]")

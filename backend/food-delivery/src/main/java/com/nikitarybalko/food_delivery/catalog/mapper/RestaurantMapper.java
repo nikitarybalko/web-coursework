@@ -1,10 +1,8 @@
-package org.nikitarybalko.food_delivery.catalog.mapper;
+package com.nikitarybalko.food_delivery.catalog.mapper;
 
 import org.mapstruct.Mapper;
-import org.nikitarybalko.food_delivery.catalog.dto.RestaurantResponse;
-import org.nikitarybalko.food_delivery.catalog.model.Restaurant;
-
-import java.util.List;
+import com.nikitarybalko.food_delivery.catalog.dto.RestaurantResponse;
+import com.nikitarybalko.food_delivery.catalog.model.Restaurant;
 
 @Mapper
 public interface RestaurantMapper {

@@ -1,13 +1,14 @@
 "use client";
 
 import { Search, SlidersHorizontal } from "lucide-react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useState, useEffect } from "react";
 import { useDebounce } from "use-debounce";
 
 export default function FoodSearchBar() {
   const router = useRouter();
   const searchParams = useSearchParams();
+  const pathname = usePathname();
 
   // Беремо початкове значення з URL (якщо користувач оновив сторінку)
   const initialSearch = searchParams.get("search") || "";
@@ -33,11 +34,11 @@ export default function FoodSearchBar() {
 
     params.delete("page");
 
-    router.push(`/food?${params.toString()}`, { scroll: false });
-  }, [debouncedText, router, searchParams]);
+    router.push(`${pathname}?${params.toString()}`, { scroll: false });
+  }, [debouncedText, router, searchParams, pathname]);
 
   return (
-    <div className="flex items-center gap-2 w-full md:w-100">
+    <div className="flex items-center w-full md:w-80">
       <div className="relative w-full">
         <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 w-5 h-5" />
         <input
@@ -48,9 +49,6 @@ export default function FoodSearchBar() {
           className="w-full pl-10 pr-4 py-2.5 bg-gray-100 border-transparent focus:bg-white focus:ring-2 focus:ring-brand-green-primary rounded-xl transition-all outline-none"
         />
       </div>
-      <button className="p-2.5 bg-gray-100 hover:bg-gray-200 rounded-xl transition-colors text-gray-700 shrink-0">
-        <SlidersHorizontal className="w-5 h-5" />
-      </button>
     </div>
   );
 }

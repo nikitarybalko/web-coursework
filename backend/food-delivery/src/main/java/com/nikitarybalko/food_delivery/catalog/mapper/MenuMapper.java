@@ -1,11 +1,11 @@
-package org.nikitarybalko.food_delivery.catalog.mapper;
+package com.nikitarybalko.food_delivery.catalog.mapper;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
-import org.nikitarybalko.food_delivery.catalog.dto.CategoryWithDishesDTO;
-import org.nikitarybalko.food_delivery.catalog.dto.DishShortDTO;
-import org.nikitarybalko.food_delivery.catalog.model.Category;
-import org.nikitarybalko.food_delivery.catalog.model.Dish;
+import com.nikitarybalko.food_delivery.catalog.dto.CategoryWithDishesDTO;
+import com.nikitarybalko.food_delivery.catalog.dto.DishShortDTO;
+import com.nikitarybalko.food_delivery.catalog.model.Category;
+import com.nikitarybalko.food_delivery.catalog.model.Dish;
 
 import java.util.List;
 

@@ -119,6 +119,9 @@ export default function DishForm({
       if (imageFile) {
         const fileData = new FormData();
         fileData.append("file", imageFile);
+
+        fileData.append("folder", "dishes");
+
         const uploadRes = await fetch("/api/upload", {
           method: "POST",
           body: fileData,

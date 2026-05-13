@@ -1,10 +1,12 @@
-package org.nikitarybalko.food_delivery.order.model;
+package com.nikitarybalko.food_delivery.order.model;
 
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
-import org.nikitarybalko.food_delivery.catalog.model.Restaurant;
-import org.nikitarybalko.food_delivery.user.model.User;
+import com.nikitarybalko.food_delivery.catalog.model.Restaurant;
+import com.nikitarybalko.food_delivery.user.model.User;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -38,6 +40,7 @@ public class Order {
     private BigDecimal totalPrice;
 
     @Enumerated(EnumType.STRING)
+    @JdbcTypeCode(SqlTypes.NAMED_ENUM)
     @Column(nullable = false)
     private OrderStatus status;
 

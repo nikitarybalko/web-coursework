@@ -1,4 +1,4 @@
-package org.nikitarybalko.food_delivery.order.model;
+package com.nikitarybalko.food_delivery.order.model;
 
 public enum OrderStatus {
     PENDING,
