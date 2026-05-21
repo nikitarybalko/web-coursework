@@ -1,5 +1,7 @@
 package com.nikitarybalko.food_delivery.catalog.service;
 
+import com.nikitarybalko.food_delivery.catalog.model.Dish;
+import com.nikitarybalko.food_delivery.catalog.repository.DishRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import com.nikitarybalko.food_delivery.catalog.model.Category;
@@ -25,6 +27,7 @@ public class CategoryService {
 
     private final CategoryRepository categoryRepository;
     private final CategoryMapper categoryMapper;
+    private final DishRepository dishRepository;
 
     public List<CategoryResponse> getRootCategories(Integer limit) {
 
@@ -42,7 +45,7 @@ public class CategoryService {
         return categoryRepository.findCategoriesByRestaurantId(restaurantId)
                 .stream()
                 .map(categoryMapper::toResponse)
-                .collect(Collectors.toList());
+                .toList();
     }
 
     @Transactional
@@ -55,13 +58,11 @@ public class CategoryService {
     @Transactional
     public CategoryResponse updateCategory(Long id, CategoryEditRequest request) {
         log.info("Updating category with id: {}", id);
-        Category existingCategory = categoryRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Category not found: " + id));
+        Category existingCategory = getCategoryById(id);
 
         Category parentCategory = null;
         if (request.parentId() != null) {
-            parentCategory = categoryRepository.findById(request.parentId())
-                    .orElseThrow(() -> new ResourceNotFoundException("Parent category not found: " + request.parentId()));
+            parentCategory = getCategoryById(request.parentId());
         }
 
         existingCategory.setName(request.name());
@@ -75,6 +76,19 @@ public class CategoryService {
 
     @Transactional
     public void deleteCategory(Long id) {
-        categoryRepository.deleteById(id);
+        Category category = getCategoryById(id);
+
+        List<Dish> dishes = dishRepository.findAllByCategoriesId(id);
+
+        if (!dishes.isEmpty()) {
+            dishRepository.deleteAll(dishes);
+        }
+
+        categoryRepository.delete(category);
+    }
+
+    private Category getCategoryById(Long id) {
+        return categoryRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Category not found: " + id));
     }
 }

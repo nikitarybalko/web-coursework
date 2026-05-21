@@ -2,6 +2,7 @@
 
 import { CategorySliderProps } from "@/types/Categories";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import React, { useEffect, useRef, useState } from "react";
 
 export default function CategorySlider({ categories }: CategorySliderProps) {
@@ -9,6 +10,8 @@ export default function CategorySlider({ categories }: CategorySliderProps) {
 
   const [showLeft, setShowLeft] = useState(false);
   const [showRight, setShowRight] = useState(true);
+
+  const router = useRouter();
 
   const checkScroll = () => {
     if (sliderRef.current) {
@@ -39,6 +42,10 @@ export default function CategorySlider({ categories }: CategorySliderProps) {
       const offset = direction === "left" ? -250 : 250;
       sliderRef.current.scrollBy({ left: offset, behavior: "smooth" });
     }
+  };
+
+  const handleCategoryClick = (categoryId: number) => {
+    router.push(`/search?categoryId=${encodeURIComponent(categoryId)}`);
   };
 
   return (
@@ -84,6 +91,7 @@ export default function CategorySlider({ categories }: CategorySliderProps) {
                 key={category.id}
                 className="flex flex-col items-center gap-3 shrink-0 cursor-pointer hover:opacity-80 transition-opacity"
                 style={{ width: "calc(var(--spacing) * 35)" }}
+                onClick={() => handleCategoryClick(category.id)}
               >
                 {/* Кружок з категорією */}
                 <div className="w-35 h-35 rounded-full bg-gray-bg flex items-center justify-center text-5xl">

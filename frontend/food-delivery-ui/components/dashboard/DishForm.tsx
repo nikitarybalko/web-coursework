@@ -11,13 +11,14 @@ import {
 } from "lucide-react";
 import Image from "next/image";
 import { useSession } from "next-auth/react";
-import { CategoryWithDishes, Dish } from "@/types/Restaurant";
+import { Dish } from "@/types/Restaurant";
+import { Category } from "@/types/Categories";
 
 interface DishFormProps {
   isOpen: boolean;
   onClose: () => void;
   initialData?: Dish | null;
-  categories: CategoryWithDishes[];
+  categories: Category[];
   restaurantId?: number;
   initialCategoryId?: number;
   onSuccess: () => void;
@@ -141,8 +142,8 @@ export default function DishForm({
       };
 
       const url = isEditing
-        ? `${process.env.NEXT_PUBLIC_API_URL}/api/dishes/${initialData.id}`
-        : `${process.env.NEXT_PUBLIC_API_URL}/api/dishes`;
+        ? `${process.env.NEXT_PUBLIC_API_URL}/dishes/${initialData.id}`
+        : `${process.env.NEXT_PUBLIC_API_URL}/dishes`;
 
       const token = session.data?.idToken;
       const res = await fetch(url, {
@@ -218,7 +219,7 @@ export default function DishForm({
                   required
                   type="number"
                   min="0"
-                  step="1"
+                  step="0.01"
                   name="price"
                   value={formData.price}
                   onChange={handleChange}

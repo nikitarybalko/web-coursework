@@ -25,7 +25,7 @@ export const authOptions: AuthOptions = {
 
         try {
           const res = await fetch(
-            `${process.env.INTERNAL_API_URL}/auth/login`,
+            `${process.env.INTERNAL_API_URL}/authentication/login`,
             {
               method: "POST",
               headers: { "Content-Type": "application/json" },
@@ -67,7 +67,7 @@ export const authOptions: AuthOptions = {
       if (account?.provider === "google" && user) {
         try {
           const res = await fetch(
-            `${process.env.INTERNAL_API_URL}/auth/google`,
+            `${process.env.INTERNAL_API_URL}/authentication/google`,
             {
               method: "POST",
               headers: { "Content-Type": "application/json" },
@@ -87,8 +87,6 @@ export const authOptions: AuthOptions = {
               const decodedPayload = JSON.parse(
                 Buffer.from(payloadBase64, "base64").toString("utf-8"),
               );
-
-              console.log("decoded payload: " + decodedPayload.role);
 
               token.idToken = data.token;
               token.role = decodedPayload.role;

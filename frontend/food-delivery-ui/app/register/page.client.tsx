@@ -33,14 +33,20 @@ export default function RegisterClient() {
   const router = useRouter();
 
   const onSubmit = async (data: RegisterSchema) => {
-    console.log("Sending to Spring Boot: ", data);
+    const payload = {
+      email: data.email,
+      password: data.password,
+      fullName: data.fullName,
+      phoneNumber: data.phone,
+    };
+    console.log("Sending to Spring Boot: ", payload);
     try {
       const res = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/auth/register`,
+        `${process.env.NEXT_PUBLIC_API_URL}/authentication/register`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(data),
+          body: JSON.stringify(payload),
         },
       );
 
@@ -138,7 +144,12 @@ export default function RegisterClient() {
                 type="tel"
                 icon={<Phone size={18} className="text-placeholder" />}
                 placeholder="+380XXXXXXXXXX"
-                {...register("phone")}
+                {...register("phone", {
+                  pattern: {
+                    value: /^\+380\d{10}$/,
+                    message: "Phone number must be in format +380XXXXXXXXXX",
+                  },
+                })}
                 error={errors.phone?.message}
               />
 

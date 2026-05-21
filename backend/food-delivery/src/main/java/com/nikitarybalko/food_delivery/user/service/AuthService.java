@@ -58,11 +58,16 @@ public class AuthService {
 
         String hashedPassword = passwordEncoder.encode(request.password());
 
+        String safePhoneNumber = null;
+        if(request.phoneNumber() != null && !request.phoneNumber().isBlank()) {
+            safePhoneNumber = request.phoneNumber();
+        }
+
         User newUser = new User(
                 request.email(),
                 hashedPassword,
                 request.fullName(),
-                request.phoneNumber(),
+                safePhoneNumber,
                 Role.CUSTOMER,
                 AuthProvider.LOCAL
         );

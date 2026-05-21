@@ -25,6 +25,7 @@ export interface Dish {
   imagePath: string;
   description: string;
   restaurantId: number;
+  restaurantName: string;
 }
 
 export interface FetchDishesParams {

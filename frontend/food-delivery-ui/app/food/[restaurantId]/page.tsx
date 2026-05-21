@@ -47,8 +47,6 @@ export default async function RestaurantMenuPage({
     ? categories.find((c) => String(c.id) === categoryId)?.name
     : null;
 
-  console.log(pageData.content);
-
   return (
     <>
       <Header />

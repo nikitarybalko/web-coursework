@@ -69,16 +69,12 @@ export default function CheckoutPage() {
     setError(null);
 
     try {
-      // 1. Імітація оплати карткою
       if (paymentMethod === "card") {
         setPaymentStatus("processing");
-        // Чекаємо 2.5 секунди для імітації банківського шлюзу
         await new Promise((resolve) => setTimeout(resolve, 2500));
         setPaymentStatus("success");
       }
 
-      // 2. Формуємо payload для нашого бекенду
-      console.log("items: ", items);
       const payload = {
         customerName: formData.name,
         customerPhone: formData.phone,

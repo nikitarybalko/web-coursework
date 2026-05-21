@@ -8,6 +8,7 @@ public record DishShortDTO(
         BigDecimal price,
         String imagePath,
         String description,
-        Long restaurantId
+        Long restaurantId,
+        String restaurantName
 ) {
 }

@@ -1,12 +1,11 @@
 package com.nikitarybalko.food_delivery.catalog.controller;
 
 import com.nikitarybalko.food_delivery.catalog.dto.*;
-import jakarta.validation.Valid;
-import lombok.RequiredArgsConstructor;
-import com.nikitarybalko.food_delivery.catalog.dto.*;
 import com.nikitarybalko.food_delivery.catalog.service.DishService;
 import com.nikitarybalko.food_delivery.catalog.service.MenuService;
 import com.nikitarybalko.food_delivery.catalog.service.RestaurantService;
+import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -23,7 +22,6 @@ import java.util.List;
 public class DishController {
 
     private final MenuService menuService;
-    private final RestaurantService restaurantService;
     private final DishService dishService;
 
     @GetMapping

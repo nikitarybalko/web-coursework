@@ -20,6 +20,8 @@ import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -34,10 +36,25 @@ public class DishService {
     private final DishMapper dishMapper;
 
     public Page<DishShortDTO> getDishes(Pageable pageable, String search, Long categoryId, Long restaurantId) {
-        String safeSearch = (search == null) ? "" : search.trim();
+        String searchParam = null;
 
-        Page<Dish> dishPage = dishRepository.findFilteredDishes(safeSearch, categoryId, restaurantId, pageable);
+        if (search != null && !search.trim().isEmpty()) {
+            try {
+                String decodedSearch = URLDecoder.decode(search.trim(), StandardCharsets.UTF_8);
 
+                log.info("Отримано пошуковий запит (сирий): {}", search);
+                log.info("Розкодовано в нормальний текст: {}", decodedSearch);
+
+                searchParam = "%" + decodedSearch.toLowerCase() + "%";
+            } catch (Exception e) {
+                log.error("Помилка декодування URL параметра пошуку", e);
+                searchParam = "%" + search.trim().toLowerCase() + "%";
+            }
+        }
+
+        Page<Dish> dishPage = dishRepository.findFilteredDishes(searchParam, categoryId, restaurantId, pageable);
+
+        dishPage.forEach(dish -> log.info("Dish name: {}", dish.getName()));
         Page<DishShortDTO> mappedDishes = dishPage.map(dishMapper::toDishShortDTO);
         mappedDishes.forEach(dish -> log.info("Dish restaurantId: {}", dish.restaurantId()));
         return mappedDishes;

@@ -13,6 +13,7 @@ import java.util.List;
 public interface CategoryMapper {
 
     @Mapping(target = "children", qualifiedByName = "filterAndMapChildren")
+    @Mapping(source = "parent.id", target = "parentId")
     CategoryResponse toResponse(Category category);
 
     List<CategoryResponse> toResponseList(List<Category> categories);
