@@ -15,17 +15,16 @@ public interface DishRepository extends JpaRepository<Dish, Long> {
     @EntityGraph(attributePaths = {"categories"})
     List<Dish> findByRestaurantId(Long restaurantId);
 
-    @Query("SELECT DISTINCT d FROM Dish d " +
-            "LEFT JOIN d.categories c " +
-            "WHERE (:search = '' OR " +
-            "       LOWER(d.name) LIKE LOWER(CONCAT('%', :search, '%')) OR " +
-            "       LOWER(d.description) LIKE LOWER(CONCAT('%', :search, '%'))) " +
+    List<Dish> findAllByCategoriesId(Long categoryId);
+
+    @Query("SELECT d FROM Dish d " +
+            "WHERE (:search IS NULL OR LOWER(d.name) LIKE :search OR LOWER(d.description) LIKE :search) " +
             "AND (:restaurantId IS NULL OR d.restaurant.id = :restaurantId) " +
-            "AND (:categoryId IS NULL OR c.id = :categoryId)")
+            "AND (:categoryId IS NULL OR EXISTS (SELECT c FROM d.categories c WHERE c.id = :categoryId))")
     Page<Dish> findFilteredDishes(
             @Param("search") String search,
             @Param("categoryId") Long categoryId,
-            @Param("restaurantId") long restaurantId,
+            @Param("restaurantId") Long restaurantId,
             Pageable pageable
     );
 }

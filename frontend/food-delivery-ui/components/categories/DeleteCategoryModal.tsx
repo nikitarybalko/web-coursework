@@ -32,7 +32,7 @@ export default function DeleteCategoryModal({
 
     try {
       const res = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/categories/${category.id}`,
+        `${process.env.NEXT_PUBLIC_API_URL}/categories/${category.id}`,
         {
           method: "DELETE",
           headers: {
@@ -47,9 +47,7 @@ export default function DeleteCategoryModal({
       onClose();
     } catch (error) {
       console.error(error);
-      alert(
-        "Не вдалося видалити категорію. Можливо, вона містить підкатегорії.",
-      );
+      alert("Не вдалося видалити категорію. Перевірте з'єднання з сервером.");
     } finally {
       setIsLoading(false);
     }
@@ -78,7 +76,7 @@ export default function DeleteCategoryModal({
           </p>
           <p className="text-sm text-gray-500">
             Цю дію неможливо буде скасувати. Якщо ця категорія містить страви
-            або підкатегорії, переконайтеся, що бекенд дозволяє таке видалення.
+            вони також будуть видалені, а підкатегорії стануть самостійними.
           </p>
         </div>
 

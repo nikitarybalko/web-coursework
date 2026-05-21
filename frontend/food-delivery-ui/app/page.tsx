@@ -7,8 +7,9 @@ import CategorySlider from "@/components/common/CategorySlider/CategorySlider";
 import { ArrowRight, Pizza } from "lucide-react";
 import FoodCard from "@/components/common/FoodCard/FoodCard";
 import Footer from "@/components/common/Footer/Footer";
-import { fetchCategories } from "@/lib/utils";
+import { fetchActivePromotions, fetchCategories } from "@/lib/utils";
 import OfferFoodCard from "@/components/common/OfferFoodCard/OfferFoodCard";
+import PromoCarousel from "@/components/common/PromoCarousel/PromoCarousel";
 
 const OFFERS = [
   {
@@ -40,6 +41,7 @@ export const metadata: Metadata = {
 
 export default async function Home() {
   const categories = await fetchCategories();
+  const promotions = await fetchActivePromotions();
   return (
     <>
       <Header />
@@ -47,17 +49,7 @@ export default async function Home() {
         <div className="flex flex-col max-w-page-max-w w-full self-center">
           <h1 className="text-2xl font-medium">Спеціальні пропозиції</h1>
           <span className="text-[#625B71] text-sm">Від місцевих закладів</span>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mt-4">
-            {OFFERS.map((o) => (
-              <OfferFoodCard
-                key={o.id}
-                title={o.title}
-                tags={o.tags}
-                badge={o.badge}
-                imageUrl={o.imageUrl}
-              />
-            ))}
-          </div>
+          {promotions.length > 0 && <PromoCarousel promotions={promotions} />}
           <hr className="mt-std" />
           <CategorySlider categories={categories} />
           <Link className="w-fit" href="/food">

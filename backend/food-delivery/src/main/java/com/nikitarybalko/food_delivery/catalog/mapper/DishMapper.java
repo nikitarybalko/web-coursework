@@ -15,5 +15,6 @@ public interface DishMapper {
     Dish toModel(DishCreateRequest dishCreateRequest);
 
     @Mapping(source = "restaurant.id", target = "restaurantId")
+    @Mapping(source = "restaurant.name", target = "restaurantName")
     DishShortDTO toDishShortDTO(Dish dish);
 }

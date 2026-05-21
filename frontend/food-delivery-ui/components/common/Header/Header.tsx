@@ -19,7 +19,8 @@ export default function Header() {
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
-    setMounted(true);
+    const timeout = setTimeout(() => setMounted(true), 0);
+    return () => clearTimeout(timeout);
   }, []);
 
   return (
@@ -28,11 +29,6 @@ export default function Header() {
       <div className="flex items-center justify-between py-2 w-full max-w-page-max-w">
         <div className="flex items-center gap-8">
           <Logo />
-
-          <button className="hidden md:flex items-center gap-1 text-gray-800 hover:text-black">
-            <MapPin size={20} className="text-brand-green-primary" />
-            <span className="text-sm">Ваше місцезнаходження</span>
-          </button>
         </div>
 
         <div className="flex items-center gap-8">

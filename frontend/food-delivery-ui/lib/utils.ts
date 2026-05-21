@@ -9,6 +9,7 @@ import {
 } from "@/types/Restaurant";
 import { PageResponse } from "@/types/Pagination";
 import { OrderResponse } from "@/types/Order";
+import { Promotion } from "@/types/Promotion";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -231,8 +232,6 @@ export async function fetchRestaurantOrders(
     });
     if (!res.ok) throw new Error("Помилка завантаження замовлень");
     const jsonResponse = await res.json();
-    console.log("ORDER:");
-    console.log(jsonResponse);
     return jsonResponse;
   } catch (error) {
     console.error(error);
@@ -257,5 +256,17 @@ export async function updateOrderStatus(
   } catch (error) {
     console.error("Помилка оновлення статусу:", error);
     return false;
+  }
+}
+
+export async function fetchActivePromotions(): Promise<Promotion[]> {
+  const url = `${getBaseUrl()}/promotions`;
+  try {
+    const res = await fetch(url, { next: { revalidate: 60 } });
+    if (!res.ok) return [];
+    return await res.json();
+  } catch (error) {
+    console.error("Помилка завантаження акцій:", error);
+    return [];
   }
 }

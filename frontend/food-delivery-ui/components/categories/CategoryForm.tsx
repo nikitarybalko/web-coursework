@@ -15,7 +15,6 @@ import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import InputOutline from "@/components/ui/InputOutline/InputOutline";
 
-// 1. Прибрано isActive
 export interface CategoryData {
   id?: number;
   name: string;
@@ -112,6 +111,9 @@ export default function CategoryForm({
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file && file.type.startsWith("image/")) {
+      if (previewUrl && !initialData?.imagePath?.includes(previewUrl)) {
+        URL.revokeObjectURL(previewUrl);
+      }
       setImageFile(file);
       setPreviewUrl(URL.createObjectURL(file));
       setMessage(null);
@@ -119,6 +121,9 @@ export default function CategoryForm({
   };
 
   const removeImage = () => {
+    if (previewUrl && !initialData?.imagePath?.includes(previewUrl)) {
+      URL.revokeObjectURL(previewUrl);
+    }
     setImageFile(null);
     setPreviewUrl(null);
   };

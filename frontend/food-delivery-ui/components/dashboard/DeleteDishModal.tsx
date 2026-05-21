@@ -32,7 +32,7 @@ export default function DeleteDishModal({
 
     try {
       const res = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/dishes/${dish.id}`,
+        `${process.env.NEXT_PUBLIC_API_URL}/dishes/${dish.id}`,
         {
           method: "DELETE",
           headers: {

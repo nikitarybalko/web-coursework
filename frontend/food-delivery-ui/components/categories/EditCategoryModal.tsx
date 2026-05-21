@@ -54,7 +54,7 @@ export default function EditCategoryModal({
     try {
       // Робимо PUT запит на бекенд для оновлення
       const res = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/categories/${category.id}`,
+        `${process.env.NEXT_PUBLIC_API_URL}/categories/${category.id}`,
         {
           method: "PUT",
           headers: {

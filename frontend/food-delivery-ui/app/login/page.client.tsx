@@ -86,14 +86,8 @@ export default function LoginClient() {
                 type="password"
                 placeholder="Пароль"
               />
-              <Link
-                href="/forgot-pass"
-                className="flex self-end text-sm font-light border-b border-transparent hover:border-b-black"
-              >
-                Забули пароль?
-              </Link>
 
-              <Button type="submit">
+              <Button type="submit" className="mt-2">
                 {isSubmitting ? "Триває вхід..." : "Почати"}
               </Button>
 

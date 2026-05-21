@@ -1,21 +1,25 @@
 "use client";
 
 import { useRestaurant } from "@/app/providers/RestaurantContext";
-import CategoryForm from "@/components/admin/categories/CategoryForm";
-import DeleteCategoryModal from "@/components/admin/categories/DeleteCategoryModal";
+import CategoryForm from "@/components/categories/CategoryForm";
+import DeleteCategoryModal from "@/components/categories/DeleteCategoryModal";
+import DeleteDishModal from "@/components/dashboard/DeleteDishModal";
 import DishForm from "@/components/dashboard/DishForm";
 import Card from "@/components/ui/Card/Card";
-import { fetchMenuForRestaurant } from "@/lib/utils";
+import { fetchCategories, fetchMenuForRestaurant } from "@/lib/utils";
+import { Category } from "@/types/Categories";
 import { CategoryWithDishes, Dish } from "@/types/Restaurant";
 import { Edit, ImageOff, Loader2, Plus, Trash2, X } from "lucide-react";
-import { getSession, useSession } from "next-auth/react";
+import { useSession } from "next-auth/react";
 import Image from "next/image";
 import React, { useCallback, useEffect, useState } from "react";
 
 export default function Menu() {
+  const { data: session } = useSession();
   const { restaurant } = useRestaurant();
 
   const [menuData, setMenuData] = useState<CategoryWithDishes[]>([]);
+  const [allCategories, setAllCategories] = useState<Category[]>([]);
   const [isLoadingMenu, setIsLoadingMenu] = useState(true);
 
   const [isCatModalOpen, setIsCatModalOpen] = useState(false);
@@ -34,12 +38,12 @@ export default function Menu() {
     if (restaurant?.id) {
       setIsLoadingMenu(true);
       try {
-        const session = await getSession();
-        const data = await fetchMenuForRestaurant(
-          restaurant.id,
-          session?.idToken,
-        );
-        setMenuData(data);
+        const [menuResponse, categoriesResponse] = await Promise.all([
+          fetchMenuForRestaurant(restaurant.id, session?.idToken),
+          fetchCategories(),
+        ]);
+        setMenuData(menuResponse);
+        setAllCategories(categoriesResponse);
       } catch (e) {
         console.error(e);
       } finally {
@@ -48,7 +52,7 @@ export default function Menu() {
     } else if (restaurant === null) {
       setIsLoadingMenu(false);
     }
-  }, [restaurant]);
+  }, [restaurant, session?.idToken]);
 
   useEffect(() => {
     fetchMenu();
@@ -278,7 +282,7 @@ export default function Menu() {
         isOpen={isDishModalOpen}
         onClose={() => setIsDishModalOpen(false)}
         initialData={selectedDish}
-        categories={menuData}
+        categories={allCategories}
         restaurantId={restaurant?.id}
         initialCategoryId={selectedCategoryId}
         onSuccess={() => {
@@ -288,14 +292,16 @@ export default function Menu() {
       />
 
       {/* Розкоментуй, коли створиш DeleteDishModal */}
-      {/* 
-      <DeleteDishModal 
+
+      <DeleteDishModal
         isOpen={isDishDeleteOpen}
         onClose={() => setIsDishDeleteOpen(false)}
         dish={selectedDish}
-        onSuccess={() => { setIsDishDeleteOpen(false); fetchMenu(); }}
-      /> 
-      */}
+        onSuccess={() => {
+          setIsDishDeleteOpen(false);
+          fetchMenu();
+        }}
+      />
     </div>
   );
 }

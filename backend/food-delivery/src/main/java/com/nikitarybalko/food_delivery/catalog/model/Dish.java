@@ -40,5 +40,6 @@ public class Dish {
             joinColumns = @JoinColumn(name = "dish_id"),
             inverseJoinColumns = @JoinColumn(name = "category_id")
     )
+    @OrderBy("id ASC")
     private Set<Category> categories = new HashSet<>();
 }
